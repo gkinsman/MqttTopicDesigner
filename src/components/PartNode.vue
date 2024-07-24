@@ -1,14 +1,19 @@
 ﻿<script lang="ts" setup>
-import { Handle, Position, useHandleConnections } from '@vue-flow/core'
+import {
+  Handle,
+  type NodeProps,
+  Position,
+  useHandleConnections,
+} from '@vue-flow/core'
 import { computed, onMounted, ref, toRef } from 'vue'
-import type { TopologyNode } from '@/mqtt/topics'
+import type { TopologyNodeData } from '@/mqtt/topics'
 import { NodeToolbar } from '@vue-flow/node-toolbar'
 import AddIcon from '@/components/AddIcon.vue'
 import RemoveIcon from '@/components/RemoveIcon.vue'
 import VariableIcon from '@/components/VariableIcon.vue'
 
 const props = defineProps<{
-  node: TopologyNode
+  node: NodeProps<TopologyNodeData>
 }>()
 
 const emit = defineEmits<{
@@ -27,7 +32,6 @@ const targetConnections = useHandleConnections({
 
 onMounted(() => {
   console.log(`focusing on input`)
-  //nameInput.value!.focus()
 })
 
 const nameInput = ref<HTMLInputElement | null>(null)
@@ -42,10 +46,6 @@ function remove() {
 
 function addNew() {
   emit('addNew', props.node.id)
-}
-
-const vFocus = {
-  mounted: (el) => el.focus(),
 }
 
 const hoveringOverPart = ref(false)

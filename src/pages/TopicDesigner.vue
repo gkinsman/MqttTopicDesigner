@@ -54,7 +54,7 @@ function addNew(id: string) {
 function remove(id: string) {
   const partToRemove = nodes.value.find((n) => n.id === id)
   if (!!partToRemove) {
-    partToRemove.data!.parent.removePart(partToRemove)
+    partToRemove!.data!.parent?.removePart(partToRemove)
 
     rebuildNodes()
     nextTick(() => fitView())
