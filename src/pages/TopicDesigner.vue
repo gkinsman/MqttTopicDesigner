@@ -24,8 +24,7 @@ function rebuildNodes() {
 
   nextTick(() => {
     edges.value = allNodes.edges
-    layoutGraph()
-    setTimeout(() => fitView(), 10)
+    nodesInitialized()
   })
 }
 
@@ -37,16 +36,18 @@ function initialLayout() {
   third.addPart('three')
 
   rebuildNodes()
-
-  setTimeout(() => fitView(), 10)
 }
 
-function layoutGraph() {
-  layout(nodes.value, edges.value)
+function nodesInitialized() {
+  setTimeout(() => {
+    layout(nodes.value, edges.value)
+
+    fitView()
+  }, 1)
 }
 
 function addNew(id: string) {
-  nodes.value.find((n) => n.id === id)?.addPart('new')
+  nodes.value.find((n) => n.id === id)?.addPart('')
 
   rebuildNodes()
 }
@@ -54,10 +55,9 @@ function addNew(id: string) {
 function remove(id: string) {
   const partToRemove = nodes.value.find((n) => n.id === id)
   if (!!partToRemove) {
-    partToRemove!.data!.parent?.removePart(partToRemove)
+    partToRemove.data.parent?.removePart(partToRemove)
 
     rebuildNodes()
-    nextTick(() => fitView())
   }
 }
 </script>
@@ -71,12 +71,13 @@ function remove(id: string) {
       :nodes="nodes"
       :nodesDraggable="true"
       @init="initialLayout"
+      @nodesInitialized="nodesInitialized"
     >
       <template #node-part="props">
         <PartNode
           :node="props"
           @addNew="addNew"
-          @nameChanged="layoutGraph"
+          @nameChanged="nodesInitialized"
           @remove="remove"
         />
       </template>

@@ -11,6 +11,7 @@ import { NodeToolbar } from '@vue-flow/node-toolbar'
 import AddIcon from '@/components/AddIcon.vue'
 import RemoveIcon from '@/components/RemoveIcon.vue'
 import VariableIcon from '@/components/VariableIcon.vue'
+import { vFocus } from '@/directives/FocusDirective'
 
 const props = defineProps<{
   node: NodeProps<TopologyNodeData>
