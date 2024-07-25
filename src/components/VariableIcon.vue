@@ -1,10 +1,12 @@
 ﻿<script lang="ts" setup>
 const props = defineProps<{
   color?: string
+  active?: boolean
 }>()
 </script>
 <template>
   <svg
+    :class="{ active }"
     :fill="props.color"
     height="38px"
     stroke="1px"
@@ -35,7 +37,8 @@ const props = defineProps<{
 </template>
 
 <style scoped>
-svg:hover {
+svg:hover,
+svg.active {
   :first-child {
     opacity: 1;
   }

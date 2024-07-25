@@ -5,7 +5,7 @@ import {
   Position,
   useHandleConnections,
 } from '@vue-flow/core'
-import { computed, onMounted, ref, toRef } from 'vue'
+import { computed, ref, toRef } from 'vue'
 import type { TopologyNodeData } from '@/mqtt/topics'
 import { NodeToolbar } from '@vue-flow/node-toolbar'
 import AddIcon from '@/components/AddIcon.vue'
@@ -31,10 +31,6 @@ const targetConnections = useHandleConnections({
   type: 'source',
 })
 
-onMounted(() => {
-  console.log(`focusing on input`)
-})
-
 const nameInput = ref<HTMLInputElement | null>(null)
 
 function nameChanged() {
@@ -49,6 +45,10 @@ function addNew() {
   emit('addNew', props.node.id)
 }
 
+function toggleIsVariable() {
+  props.node.data.part.isPlaceholder = !props.node.data.part.isPlaceholder
+}
+
 const hoveringOverPart = ref(false)
 const hoveringOverToolbar = ref(false)
 const toolbarActive = computed(() => {
@@ -57,6 +57,7 @@ const toolbarActive = computed(() => {
 
 const isSender = toRef(() => sourceConnections.value.length >= 0)
 const isReceiver = toRef(() => targetConnections.value.length >= 0)
+const isRoot = toRef(() => !isReceiver)
 </script>
 
 <template>
@@ -67,6 +68,12 @@ const isReceiver = toRef(() => targetConnections.value.length >= 0)
         @mouseenter="hoveringOverPart = true"
         @mouseleave="hoveringOverPart = false"
       >
+        <span
+          v-show="props.node.data.part.isPlaceholder"
+          class="text-[#eaa03d] absolute left-1"
+          >{</span
+        >
+
         <input
           ref="nameInput"
           v-model="props.node.data.part.name"
@@ -76,6 +83,11 @@ const isReceiver = toRef(() => targetConnections.value.length >= 0)
           type="text"
           @input="nameChanged"
         />
+        <span
+          v-show="props.node.data.part.isPlaceholder"
+          class="text-[#eaa03d] absolute right-1"
+          >}</span
+        >
       </div>
 
       <NodeToolbar
@@ -88,9 +100,19 @@ const isReceiver = toRef(() => targetConnections.value.length >= 0)
           @mouseenter="hoveringOverToolbar = true"
           @mouseleave="hoveringOverToolbar = false"
         >
-          <VariableIcon class="cursor-pointer" color="#eaa03d"></VariableIcon>
+          <VariableIcon
+            :active="props.node.data.part.isPlaceholder"
+            class="cursor-pointer"
+            color="#eaa03d"
+            @click="toggleIsVariable"
+          ></VariableIcon>
           <AddIcon class="cursor-pointer" color="#4EAA6E" @click="addNew" />
-          <RemoveIcon class="cursor-pointer" color="#cb320c" @click="remove" />
+          <RemoveIcon
+            v-if="!isRoot"
+            class="cursor-pointer"
+            color="#cb320c"
+            @click="remove"
+          />
         </div>
       </NodeToolbar>
     </div>
