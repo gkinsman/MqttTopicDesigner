@@ -1,5 +1,5 @@
 ﻿export const vFocus = {
   mounted: (el: HTMLElement) => {
-    setTimeout(() => el.focus(), 400)
+    setTimeout(() => el.focus(), 10)
   },
 }

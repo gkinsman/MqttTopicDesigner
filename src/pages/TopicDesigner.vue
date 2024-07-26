@@ -12,38 +12,41 @@ const { fitView } = useVueFlow()
 
 const root = ref<TopologyNode>(createRoot('root'))
 
-const nodes = ref<TopologyNode[]>([])
-const edges = ref<Edge[]>([])
+root.value.addPart('second').addPart('under second').addPart('under second')
+const third = root.value.addPart('third')
+third.addPart('one')
+third.addPart('two')
+third.addPart('three')
+
+const allNodes = root.value.getWithChildren()
+
+const nodes = ref<TopologyNode[]>(allNodes.nodes)
+const edges = ref<Edge[]>(allNodes.edges)
+
+function onInit() {
+  layoutNodes()
+}
 
 function rebuildNodes() {
-  edges.value = []
-  nodes.value = []
   const allNodes = root.value.getWithChildren()
 
   nodes.value = allNodes.nodes
 
   nextTick(() => {
     edges.value = allNodes.edges
-    nodesInitialized()
-  })
-}
-
-function initialLayout() {
-  root.value.addPart('second').addPart('under second').addPart('under second')
-  const third = root.value.addPart('third')
-  third.addPart('one')
-  third.addPart('two')
-  third.addPart('three')
-
-  rebuildNodes()
-}
-
-function nodesInitialized() {
-  setTimeout(() => {
     layout(nodes.value, edges.value)
+  })
 
+  setTimeout(() => {
     fitView()
-  }, 1)
+  }, 0)
+}
+
+function layoutNodes() {
+  layout(nodes.value, edges.value)
+  setTimeout(() => {
+    fitView()
+  }, 0)
 }
 
 function addNew(id: string) {
@@ -70,14 +73,13 @@ function remove(id: string) {
       :min-zoom="0.4"
       :nodes="nodes"
       :nodesDraggable="true"
-      @init="initialLayout"
-      @nodesInitialized="nodesInitialized"
+      @init="onInit"
     >
       <template #node-part="props">
         <PartNode
           :node="props"
           @addNew="addNew"
-          @nameChanged="nodesInitialized"
+          @nameChanged="layoutNodes"
           @remove="remove"
         />
       </template>
