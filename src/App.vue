@@ -1,6 +1,4 @@
-<script lang="ts" setup>
-import TopicDesigner from '@/pages/TopicDesigner.vue'
-</script>
+<script lang="ts" setup></script>
 
 <template>
   <header></header>
@@ -12,7 +10,7 @@ import TopicDesigner from '@/pages/TopicDesigner.vue'
     </div>
 
     <div>
-      <TopicDesigner />
+      <RouterView />
     </div>
   </div>
 

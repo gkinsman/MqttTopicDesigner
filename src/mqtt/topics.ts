@@ -4,9 +4,7 @@ type TopologyRoot = TopologyNode
 
 type NodesAndEdges = { nodes: TopologyNode[]; edges: Edge[] }
 
-let idCounter = 0
-
-class TopicPart {
+export class TopicPart {
   private constructor(
     public name: string,
     public isPlaceholder: boolean
@@ -26,18 +24,30 @@ export interface TopologyNodeData {
   parent: TopologyNode | null
 }
 
+interface IdProvider {
+  nextId: () => number
+}
+
 export class TopologyNode implements Node {
   public children: TopologyNode[] = []
-  public id: string = (idCounter++).toString()
+  public id: string
   public position = { x: 0, y: 0 }
   public type: string = 'part'
   public draggable = false
 
-  constructor(public data: TopologyNodeData) {}
+  constructor(
+    public idProvider: IdProvider,
+    public data: TopologyNodeData
+  ) {
+    this.id = idProvider.nextId().toString()
+  }
 
   public addPart(part: string) {
     const topicPart = TopicPart.fromString(part)
-    const newNode = new TopologyNode({ part: topicPart, parent: this })
+    const newNode = new TopologyNode(this.idProvider, {
+      part: topicPart,
+      parent: this,
+    })
     this.children.push(newNode)
     return newNode
   }
@@ -58,6 +68,22 @@ export class TopologyNode implements Node {
       nodes: allNodes,
       edges: allEdges,
     }
+  }
+
+  find(id: string): TopologyNode | undefined {
+    if (this.id == id) {
+      return this
+    }
+
+    for (const child of this.children) {
+      const found = child.find(id)
+      if (found) {
+        return found
+      }
+    }
+
+    const child = this.children.find((c) => c.find(id))
+    if (child) return child
   }
 
   removePart(partToRemove: TopologyNode): boolean {
@@ -86,11 +112,24 @@ function createEdge(from: TopologyNode, to: TopologyNode): Edge {
   }
 }
 
+function useIdProvider(): IdProvider {
+  let id = 1
+
+  function nextId() {
+    return id++
+  }
+
+  return {
+    nextId,
+  }
+}
+
 export function useTopology() {
   function createRoot(name: string): TopologyRoot {
+    const idProvider = useIdProvider()
     const topicPart = TopicPart.fromString(name)
 
-    return new TopologyNode({ part: topicPart, parent: null })
+    return new TopologyNode(idProvider, { part: topicPart, parent: null })
   }
 
   return { createRoot }

@@ -17,6 +17,9 @@ importers:
       '@vue-flow/node-toolbar':
         specifier: ^1.1.0
         version: 1.1.0(@vue-flow/core@1.39.0(vue@3.4.33(typescript@5.4.5)))
+      '@vueuse/router':
+        specifier: ^10.11.0
+        version: 10.11.0(vue-router@4.4.0(vue@3.4.33(typescript@5.4.5)))(vue@3.4.33(typescript@5.4.5))
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.19(postcss@8.4.39)
@@ -35,6 +38,9 @@ importers:
       vue-input-autowidth:
         specifier: ^2.2.1
         version: 2.2.1
+      vue-router:
+        specifier: '4'
+        version: 4.4.0(vue@3.4.33(typescript@5.4.5))
     devDependencies:
       '@tsconfig/node20':
         specifier: ^20.1.4
@@ -625,6 +631,9 @@ packages:
   '@vue/compiler-ssr@3.4.33':
     resolution: {integrity: sha512-0WveC9Ai+eT/1b6LCV5IfsufBZ0HP7pSSTdDjcuW302tTEgoBw8rHVHKPbGUtzGReUFCRXbv6zQDDgucnV2WzQ==}
 
+  '@vue/devtools-api@6.6.3':
+    resolution: {integrity: sha512-0MiMsFma/HqA6g3KLKn+AGpL1kgKhFWszC9U29NfpWK5LE7bjeXxySWJrOJ77hBz+TBrBQ7o4QJqbPbqbs8rJw==}
+
   '@vue/devtools-core@7.3.6':
     resolution: {integrity: sha512-XqFYVkyS3eySHF4bgLt+KF6yL6nYzVY/JTJHnK6KIJXIE4GIAxmn5Gxfsb4cUG9sl0FGiMqRCnM37Q+P08wr8A==}
     peerDependencies:
@@ -672,6 +681,11 @@ packages:
 
   '@vueuse/metadata@10.11.0':
     resolution: {integrity: sha512-kQX7l6l8dVWNqlqyN3ePW3KmjCQO3ZMgXuBMddIu83CmucrsBfXlH+JoviYyRBws/yLTQO8g3Pbw+bdIoVm4oQ==}
+
+  '@vueuse/router@10.11.0':
+    resolution: {integrity: sha512-1U4DiJuRhe3JeUXxuoKM2wlBslqu5ug8yraluD9bgWDHCRDtY9XUDsjViZufMKjQrddqvv2H6DRSRf9MWO4VSA==}
+    peerDependencies:
+      vue-router: '>=4.0.0-rc.1'
 
   '@vueuse/shared@10.11.0':
     resolution: {integrity: sha512-fyNoIXEq3PfX1L3NkNhtVQUSRtqYwJtJg+Bp9rIzculIZWHTkKSysujrOk2J+NrRulLTQH9+3gGSfYLWSEWU1A==}
@@ -1789,6 +1803,11 @@ packages:
   vue-input-autowidth@2.2.1:
     resolution: {integrity: sha512-AXmLy53BBg5nqFnjRc8N1c0xNLljiuba5yjxRaW9+HRy9F9zhk5AEu6n3cu3SYoDLYQAM0GNgWzzi3g9KTFyBA==}
 
+  vue-router@4.4.0:
+    resolution: {integrity: sha512-HB+t2p611aIZraV2aPSRNXf0Z/oLZFrlygJm+sZbdJaW6lcFqEDQwnzUBXn+DApw+/QzDU/I9TeWx9izEjTmsA==}
+    peerDependencies:
+      vue: ^3.2.0
+
   vue-template-compiler@2.7.16:
     resolution: {integrity: sha512-AYbUWAJHLGGQM7+cNTELw+KsOG9nl2CnSv467WobS5Cv9uk3wFcnr1Etsz2sEIHEZvw1U+o9mRlEO6QbZvUPGQ==}
 
@@ -2434,6 +2453,8 @@ snapshots:
       '@vue/compiler-dom': 3.4.33
       '@vue/shared': 3.4.33
 
+  '@vue/devtools-api@6.6.3': {}
+
   '@vue/devtools-core@7.3.6(vite@5.3.4(@types/node@20.14.11))(vue@3.4.33(typescript@5.4.5))':
     dependencies:
       '@vue/devtools-kit': 7.3.6
@@ -2515,6 +2536,15 @@ snapshots:
       - vue
 
   '@vueuse/metadata@10.11.0': {}
+
+  '@vueuse/router@10.11.0(vue-router@4.4.0(vue@3.4.33(typescript@5.4.5)))(vue@3.4.33(typescript@5.4.5))':
+    dependencies:
+      '@vueuse/shared': 10.11.0(vue@3.4.33(typescript@5.4.5))
+      vue-demi: 0.14.8(vue@3.4.33(typescript@5.4.5))
+      vue-router: 4.4.0(vue@3.4.33(typescript@5.4.5))
+    transitivePeerDependencies:
+      - '@vue/composition-api'
+      - vue
 
   '@vueuse/shared@10.11.0(vue@3.4.33(typescript@5.4.5))':
     dependencies:
@@ -3604,6 +3634,11 @@ snapshots:
       vue: 3.4.33(typescript@5.4.5)
 
   vue-input-autowidth@2.2.1: {}
+
+  vue-router@4.4.0(vue@3.4.33(typescript@5.4.5)):
+    dependencies:
+      '@vue/devtools-api': 6.6.3
+      vue: 3.4.33(typescript@5.4.5)
 
   vue-template-compiler@2.7.16:
     dependencies:

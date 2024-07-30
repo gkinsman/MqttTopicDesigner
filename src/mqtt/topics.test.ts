@@ -1,11 +1,13 @@
 ﻿import { expect, test } from 'vitest'
 import { useTopology } from '@/mqtt/topics'
+import { deserializeTree, serializeTree } from '@/mqtt/serializeTree'
 
 test('Can create topology with single named node', () => {
   const { createRoot } = useTopology()
   const topology = createRoot('first')
 
   expect(topology.data.part.name).toBe('first')
+  expect(topology.id).toBe('1')
 })
 
 test('Can create topology with two nodes', () => {
@@ -61,7 +63,7 @@ test('Can remove nodes from tree', () => {
   const root = createRoot('first')
 
   const second = root.addPart('second')
-  const third = second.addPart('third')
+  second.addPart('third')
 
   root.removePart(second)
 
@@ -69,4 +71,46 @@ test('Can remove nodes from tree', () => {
 
   expect(flattened.nodes.length).toBe(1)
   expect(flattened.nodes[0].data.part.name).toBe('first')
+})
+
+test('Can serialize tree', () => {
+  const { createRoot } = useTopology()
+  const root = createRoot('first')
+
+  const second = root.addPart('second')
+  second.addPart('third')
+
+  const serialized = serializeTree(root)
+
+  expect(serialized).toBe(
+    '[{"i":"1","n":"first"},{"i":"2","n":"second","p":"1"},{"i":"3","n":"third","p":"2"}]'
+  )
+})
+
+test('Can find node', () => {
+  const { createRoot } = useTopology()
+  const root = createRoot('first')
+
+  const second = root.addPart('second')
+  const third = second.addPart('third')
+
+  const found = root.find(third.id)
+  expect(found?.id).toBe(third.id)
+})
+
+test('Can deserialize tree', () => {
+  const { createRoot } = useTopology()
+
+  const root = createRoot('first')
+
+  const second = root.addPart('second')
+  const third = second.addPart('third')
+
+  const serialized = serializeTree(root)
+  const deserializedRoot = deserializeTree(serialized)
+
+  // Expect that id's are reconstructed correctly
+  expect(deserializedRoot.data.part.name).toBe('first')
+  expect(deserializedRoot.find('2')?.data.part.name).toBe('second')
+  expect(deserializedRoot.find('3')?.data.part.name).toBe('third')
 })
