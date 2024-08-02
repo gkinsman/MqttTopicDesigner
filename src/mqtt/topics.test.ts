@@ -86,7 +86,6 @@ test('Can serialize tree', () => {
     '[{"i":"1","n":"first"},{"i":"2","n":"second","p":"1"},{"i":"3","n":"third","p":"2"}]'
   )
 })
-
 test('Can find node', () => {
   const { createRoot } = useTopology()
   const root = createRoot('first')
@@ -109,7 +108,7 @@ test('Can deserialize tree', () => {
   const serialized = serializeTree(root)
   const deserializedRoot = deserializeTree(serialized)
 
-  // Expect that id's are reconstructed correctly
+  // Expect that ids are reconstructed correctly
   expect(deserializedRoot.data.part.name).toBe('first')
   expect(deserializedRoot.find('2')?.data.part.name).toBe('second')
   expect(deserializedRoot.find('3')?.data.part.name).toBe('third')

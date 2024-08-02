@@ -9,6 +9,7 @@ export default {
       white: '#FBE9D0',
       navy: '#244856',
       red: '#E74833',
+      redhover: 'rgba(231,72,51,0.51)',
       maroon: '#874F42',
       blue: '#90AEAE',
     },
