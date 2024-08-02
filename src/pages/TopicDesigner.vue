@@ -7,9 +7,6 @@ import PartNode from '@/components/PartNode.vue'
 import { deserializeTree, serializeTree } from '@/mqtt/serializeTree'
 import { useRouteQuery } from '@vueuse/router'
 import { useRoute, useRouter } from 'vue-router'
-import UndoIcon from '@/components/UndoIcon.vue'
-import RedoIcon from '@/components/RedoIcon.vue'
-import TopBarButton from '@/components/TopBarButton.vue'
 
 const { createRoot } = useTopology()
 const { layout } = useLayout()
@@ -104,18 +101,6 @@ function nodeChanged() {
   layoutNodes()
   updateRouteHash()
 }
-
-function undo() {
-  router.go(-1)
-  setFromUrl()
-
-  // doesn't seem to undo/redo text changes
-}
-
-function redo() {
-  router.go(1)
-  setFromUrl()
-}
 </script>
 
 <template>
@@ -124,14 +109,7 @@ function redo() {
       <div class="text-xl self-center pl-5 text-white font-medium">
         MQTT Topic Designer
       </div>
-      <div class="flex select-none">
-        <TopBarButton @click="undo">
-          <UndoIcon color="white" />
-        </TopBarButton>
-        <TopBarButton @click="redo">
-          <RedoIcon color="white" />
-        </TopBarButton>
-      </div>
+
       <div></div>
     </div>
 
