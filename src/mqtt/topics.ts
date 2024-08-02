@@ -62,7 +62,7 @@ export class TopologyNode implements Node {
     const allEdges: Edge[] = [
       ...thisEdges,
       ...childrenProbe.flatMap((c) => c.edges),
-    ]
+    ].sort((a, b) => (a.id > b.id ? 1 : -1))
 
     return {
       nodes: allNodes,
