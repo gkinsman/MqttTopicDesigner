@@ -11,7 +11,6 @@ import { useRoute, useRouter } from 'vue-router'
 const { createRoot } = useTopology()
 const { layout } = useLayout()
 const { fitView } = useVueFlow()
-const route = useRoute()
 const router = useRouter()
 
 const tree = useRouteQuery('tree')
@@ -127,7 +126,7 @@ function nodeChanged() {
             <PartNode
               :node="props"
               @addNew="addNew"
-              @nameChanged="nodeChanged"
+              @nodeChanged="nodeChanged"
               @remove="remove"
             />
           </template>

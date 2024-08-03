@@ -78,12 +78,13 @@ test('Can serialize tree', () => {
   const root = createRoot('first')
 
   const second = root.addPart('second')
+  second.data.part.isPlaceholder = true
   second.addPart('third')
 
   const serialized = serializeTree(root)
 
   expect(serialized).toBe(
-    '[{"i":"1","n":"first"},{"i":"2","n":"second","p":"1"},{"i":"3","n":"third","p":"2"}]'
+    '[{"i":"1","n":"first"},{"i":"2","n":"second","p":"1","v":1},{"i":"3","n":"third","p":"2"}]'
   )
 })
 test('Can find node', () => {
@@ -103,6 +104,7 @@ test('Can deserialize tree', () => {
   const root = createRoot('first')
 
   const second = root.addPart('second')
+  second.data.part.isPlaceholder = true
   const third = second.addPart('third')
 
   const serialized = serializeTree(root)
@@ -110,6 +112,10 @@ test('Can deserialize tree', () => {
 
   // Expect that ids are reconstructed correctly
   expect(deserializedRoot.data.part.name).toBe('first')
-  expect(deserializedRoot.find('2')?.data.part.name).toBe('second')
+
+  const desSecond = deserializedRoot.find('2')
+  expect(desSecond?.data.part.name).toBe('second')
+  expect(desSecond?.data.part.isPlaceholder).toBe(true)
+
   expect(deserializedRoot.find('3')?.data.part.name).toBe('third')
 })

@@ -18,7 +18,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: 'nameChanged'): void
+  (e: 'nodeChanged'): void
   (e: 'remove', nodeId: string): void
   (e: 'addNew', nodeId: string): void
 }>()
@@ -33,8 +33,8 @@ const targetConnections = useHandleConnections({
 
 const nameInput = ref<HTMLInputElement | null>(null)
 
-function nameChanged() {
-  emit('nameChanged')
+function nodeChanged() {
+  emit('nodeChanged')
 }
 
 function remove() {
@@ -47,6 +47,7 @@ function addNew() {
 
 function toggleIsVariable() {
   props.node.data.part.isPlaceholder = !props.node.data.part.isPlaceholder
+  nodeChanged()
 }
 
 const hoveringOverPart = ref(false)
@@ -81,7 +82,7 @@ const isRoot = toRef(() => !isReceiver)
           v-focus
           class="px-2 border-2 rounded-md nodrag bg-red text-white outline-white"
           type="text"
-          @input="nameChanged"
+          @input="nodeChanged"
         />
         <span
           v-show="props.node.data.part.isPlaceholder"
