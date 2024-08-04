@@ -15,7 +15,12 @@ export function useLayout() {
 
     dagreGraph.setDefaultEdgeLabel(() => ({}))
 
-    dagreGraph.setGraph({ rankdir: 'LR' })
+    dagreGraph.setGraph({
+      rankdir: 'LR',
+      ranksep: 80,
+      marginx: 10,
+      marginy: 10,
+    })
 
     for (const node of nodes) {
       // if you need width+height of nodes for your layout, you can use the dimensions property of the internal node (`GraphNode` type)

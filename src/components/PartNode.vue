@@ -18,7 +18,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: 'nodeChanged'): void
+  (e: 'nodeChanged', rebuild: boolean): void
   (e: 'remove', nodeId: string): void
   (e: 'addNew', nodeId: string): void
 }>()
@@ -34,7 +34,7 @@ const targetConnections = useHandleConnections({
 const nameInput = ref<HTMLInputElement | null>(null)
 
 function nodeChanged() {
-  emit('nodeChanged')
+  emit('nodeChanged', true)
 }
 
 function remove() {
@@ -47,7 +47,7 @@ function addNew() {
 
 function toggleIsVariable() {
   props.node.data.part.isPlaceholder = !props.node.data.part.isPlaceholder
-  nodeChanged()
+  emit('nodeChanged', false)
 }
 
 const hoveringOverPart = ref(false)

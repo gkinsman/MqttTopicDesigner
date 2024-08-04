@@ -6,7 +6,7 @@ import { TopologyNode, useTopology } from '@/mqtt/topics'
 import PartNode from '@/components/PartNode.vue'
 import { deserializeTree, serializeTree } from '@/mqtt/serializeTree'
 import { useRouteQuery } from '@vueuse/router'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 
 const { createRoot } = useTopology()
 const { layout } = useLayout()
@@ -33,20 +33,20 @@ onMounted(() => {
     third.addPart('two')
     third.addPart('three')
   }
-  rebuildNodes()
+  rebuildNodes(true)
 })
 
 function onInit() {
-  layoutNodes()
+  layoutNodes(true)
 }
 
 function setFromUrl() {
   const json = atob(tree.value as string)
   root.value = deserializeTree(json)
-  rebuildNodes()
+  rebuildNodes(true)
 }
 
-function rebuildNodes() {
+function rebuildNodes(fit: boolean) {
   const allNodes = root.value.getWithChildren()
 
   nodes.value = allNodes.nodes
@@ -59,16 +59,21 @@ function rebuildNodes() {
     layout(nodes.value, edges.value)
   })
 
-  setTimeout(() => {
-    fitView()
-  }, 0)
+  if (fit) {
+    setTimeout(() => {
+      fitView()
+    }, 0)
+  }
 }
 
-function layoutNodes() {
+function layoutNodes(fit: boolean) {
   layout(nodes.value, edges.value)
-  setTimeout(() => {
-    fitView()
-  }, 0)
+
+  if (fit) {
+    setTimeout(() => {
+      fitView()
+    }, 0)
+  }
 }
 
 function updateRouteHash() {
@@ -83,7 +88,7 @@ function updateRouteHash() {
 function addNew(id: string) {
   nodes.value.find((n) => n.id === id)?.addPart('')
 
-  rebuildNodes()
+  rebuildNodes(false)
 }
 
 function remove(id: string) {
@@ -92,12 +97,14 @@ function remove(id: string) {
     partToRemove.data.parent?.removePart(partToRemove)
   }
 
-  rebuildNodes()
-  nodeChanged()
+  rebuildNodes(false)
+  nodeChanged(false)
 }
 
-function nodeChanged() {
-  layoutNodes()
+function nodeChanged(rebuild: boolean) {
+  if (rebuild) {
+    layoutNodes(false)
+  }
   updateRouteHash()
 }
 </script>
